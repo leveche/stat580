@@ -1,0 +1,335 @@
+\documentclass[8pt,notitlepage]{report}
+
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsmath,amscd}
+\usepackage[all]{xy}
+\usepackage{moreverb}
+\usepackage{fancyhdr}
+
+    \newtheorem{problem}{Poblem}
+    \newtheorem{theorem}{Theorem}[section]
+    \newtheorem{lemma}[theorem]{Lemma}
+    \newtheorem{proposition}[theorem]{Proposition}
+    \newtheorem{corollary}[theorem]{Corollary}
+
+    \newenvironment{solution}[1][Solution]{\begin{trivlist}
+    \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+    \newenvironment{definition}[1][Definition]{\begin{trivlist}
+    \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+    \newenvironment{example}[1][Example]{\begin{trivlist}
+    \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+    \newenvironment{remark}[1][Remark]{\begin{trivlist}
+    \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+  %  \newcommand{\qed}{\nobreak \ifvmode \relax \else
+  %        \ifdim\lastskip<1.5em \hskip-\lastskip
+  %        \hskip1.5em plus0em minus0.5em \fi \nobreak
+  %        \vrule height0.75em width0.5em depth0.25em\fi}
+
+    \renewcommand{\qedsymbol}{\textsquare}
+
+\addtolength{\textwidth}{1in}
+\addtolength{\hoffset}{-0.5in}
+\addtolength{\textheight}{2in}
+\addtolength{\voffset}{-0.3in}
+
+\newcommand{\PP}{\mathbb{P}}
+
+\pagestyle{fancy}
+%\fancyhead[CO,CE]{S.Chaichenets}
+\fancyfoot[CO,CE]{S.Chaichenets}
+\fancyfoot[RO, LE] {\thepage}
+
+
+\begin{document}
+
+\title{STAT 580 Stochastic Processes: HW 1}
+\author{ S.\ Chaichenets }
+\maketitle
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{problem}
+	$(X_n)_0^\infty$ (time-homogeneous) Markov chain with transition matrix $P$  $\implies$
+	$(X_{2n})$ is also a Markov chain, with transition matrix $P^2$.
+\end{problem}
+
+\begin{solution}
+% Let $ Y := ({X_n}_j) $ be a sub-sequence of $X := {(X_n)}^{\infty}_{n=0}$
+
+Observe that the ``law of total probability'' gives
+\begin{equation}
+\small
+\PP(X_{n+2}=x_{n+2}|X_{n}=x_{n})
+	=  
+\sum_{x_{n+1} \in S} \PP(X_{n+2}=x_{n+2}|X_{n+1}=x_{n+1}) \ \PP(X_{n+1}=x_{n+1}|X_{n}=x_{n}) \ \PP(X_{n}=x_{n})
+\end{equation}
+\normalsize
+
+Since $(X_n)$ is a time-homogenous Markov chain, we obtain, for a probability vector $\phi_n$:
+
+\begin{equation}
+% \begin{split}
+\phi_{n+2} | \phi_{n} := 
+\PP(X_{n+2}=x_{n+2}|X_{n}=x_{n})_{x_n,x_{n+2} \in S}
+	= 
+	\sum_{i,j \in S} \phi_n(i) p(ij) p(jk)
+	= \phi_n P^2
+% \end{split}
+\end{equation}
+
+Which is to say, $P^2$ is the transition matrix of $(X_{2n})$. In our construction, 
+we have not used any assumption on any chain state $\phi_{m < n}$ prior to $n$,
+which indicates that the Markovian property holds for the sub-chain as well.\footnote{This can be easily turned into a formal argument along the lines $(X_{2n})$ not Markovian $\implies$ $(X_n)$ not Markovian.}
+
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{problem}
+  Let $(X_n)_0^\infty$ be a sequence of iid r.v.'s such that $$ \PP(X=0) = \PP(X=1) = \frac{1}{2} $$
+  Define stopping time $ T := 1 + 1_{\{X_0 = 1\} } $, and a stopped sequence $ (Y_n) := X_{n \wedge T} $.
+
+  {\bf Claim:} $(Y_n)$ does not have a Markov property.
+\end{problem}
+
+\begin{solution}
+
+The value of $Y_0 = X_0$ fixes $T$ and thus the value of all $Y_{n \geq 2}$.
+% whereas the value of $Y_{n-1}$ is irrelevant to the value of $Y_{n}$ for $n > 2$
+
+\xymatrix{
+	X_0 \ar[r] 	& X_1 \ar[r]^{X_0=0}_{T=1} \ar[dr]^{X_0=1}_{T=2}	& X_1 \ar[r] 	& \ldots \\
+			& 			& X_2 \ar[r]	& X_2 \ar[r] & \ldots
+}
+
+Formally, we have
+$$
+ T~\ge~1~\implies~Y_0~=~X_0,\, Y_1 = X_1
+$$
+and 
+\small
+$$
+ X_0 = 0 \iff Y_0 = 0 \iff T=1 \implies n \wedge T = 1 \  \forall n \geq 1 ;\   Y_{n\geq 1} = Y_1 = X_1
+$$
+\normalsize
+similarly,
+\small
+$$
+ X_0 = 1 \iff Y_0 = 2 \iff T=2 \implies n \wedge T = 2 \  \forall n \geq 2 ;\  Y_{n\geq 2} = Y_2 = X_2,\ Y_1 = X_1
+$$
+\normalsize
+Thus
+$$
+\PP(Y_2=0\,|\,Y_1=Y_0=0) = \PP(Y_2=X_1=0\,|\,Y_1=X_1=Y_0=X_0=0) = 1
+$$
+whereas
+\tiny
+$$
+\PP(Y_2=0\,|\,Y_1=0,Y_0=1) = \PP(Y_2=X_2=0\,|\,Y_1=X_1=0,\,X_0=1) = \PP(X_2=0\,|\,X_0=x_0,X_1=x_1) = \frac{1}{2}
+$$
+\normalsize
+
+This is a direct contradiction to the Markov property, which demands, {\it inter caetera}, that
+$$
+ \PP(Y_2=0\, |\, Y_1=Y_0=0 ) = \PP(Y_2=0\,|\, Y_1=0,\,Y_0\neq0) = \PP(Y_2=0\,|\,Y_1=0)
+$$
+
+\qed
+\end{solution}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{problem} Random walk on a graph.
+
+\end{problem}
+
+\begin{solution}
+
+Let us order the state space as $(00,01,10,02,11,20),$ the transition matrix for the given graph is then
+$$
+P = 
+\bordermatrix{
+  & \mathbf{00} & \mathbf{01} & \mathbf{10} &\mathbf{02} &\mathbf{11} &\mathbf{20} \cr
+\mathbf{00} & 0  & \frac{1}{2}  &  \frac{1}{2} & 0  & 0  & 0 \cr
+\mathbf{01} &  \frac{1}{4}  & 0  &  \frac{1}{4} & \frac{1}{4}  & \frac{1}{4}  & 0 \cr
+\mathbf{10} & \frac{1}{4}  & \frac{1}{4}  &  0 & 0  & \frac{1}{4}  & \frac{1}{4} \cr
+\mathbf{02} & 0  & \frac{1}{2}  &  0 & 0  & \frac{1}{2}  & 0 \cr
+\mathbf{11} & 0  & \frac{1}{4}  &  \frac{1}{4} & \frac{1}{4}  & 0  & \frac{1}{4} \cr
+\mathbf{20} & 0  & 0  &  \frac{1}{2} & 0  & \frac{1}{2}  & 0 \cr
+}
+=
+\frac{1}{4}
+\left(
+\begin{array}{cccccc}
+ 0  & 2  &  2 & 0  & 0  & 0 \\
+ 1  & 0  &  1 & 1  & 1  & 0 \\
+ 1  & 1  &  0 & 0  & 1  & 1 \\
+ 0  & 2  &  0 & 0  & 2  & 0 \\
+ 0  & 1  &  1 & 1  & 0  & 1 \\
+ 0  & 0  &  2 & 0  & 2  & 0 \\
+\end{array}
+\right)
+$$
+
+\marginpar{{\bf 3(c)(3)}}
+
+Before proceeding to numerical experiments, let us determine an invariant probability vector 
+$\mathbf{\pi} = (\pi_{00},\pi_{01},\pi_{10},\pi_{02},\pi_{11},\pi_{20})$
+from symmetry considerations: (00\, 02\, 20) (10\, 11\, 01) is clearly one of the symmetries of our graph,
+and it already forces $\pi_{00} = \pi_{02} = \pi_{20} =: a; \ \pi_{01} = \pi_{11} = \pi_{10} =: b$
+Moreover, the `mid-point' nodes $01,\,11,\,10$ are `twice as connected' as the end-nodes, so we expect $ b = 2a $.
+In conjunction with the probability normalization $ 3(a+b) = 1 $, we obtain $ a = \frac{1}{9}, b = \frac{2}{9} $,
+thus $$\mathbf{\pi} = \frac{1}{9} ( 1,2,2,1,2,1 ) $$
+
+
+Simple calculation shows that $P^2 > 0$, therefore the chain is ergodic and the above invariant probability 
+vector is unique.
+
+We now proceed to show, using numerical computation\footnote{I prefer a free general-purpose language {\rm Python}, 
+which together with ScipPy and NumPy libraries gives any computer algebra package like Matlab or Maple 
+a run for its money.},
+that indeed $\pi = \pi\,P$:
+
+\begin{verbatimtab}[4]
+Python 2.5 (r25:51918, Sep 19 2006, 08:49:13) 
+[GCC 4.0.1 (Apple Computer, Inc. build 5341)] on darwin
+IDLE 1.2      
+>>> from scipy import *
+>>> P = array ( ( (0,2,2,0,0,0),\
+		(1,0,1,1,1,0),\
+		(1,1,0,0,1,1),\
+		(0,2,0,0,2,0),\
+		(0,1,1,1,0,1),\
+		(0,0,2,0,2,0) ) )
+>>> p = (1./9.,2./9.,2./9.,1./9.,2./9.,1./9.)
+>>> M = diag ((1,1,1,1,1,1))
+>>> for i in range (4):
+		M = dot(M,P/4.)
+		print M
+		print M[0][0]
+		o = dot (p,M)
+\end{verbatimtab}
+
+The above snipplet computes and prints $P^i$ for $i \in \{1..4\}$, together with 
+$P^i_{00} (00\,00)$ and $\pi P^i$:
+
+\small
+\begin{verbatimtab}[4]
+[[ 0.    0.5   0.5   0.    0.    0.  ]
+ [ 0.25  0.    0.25  0.25  0.25  0.  ]
+ [ 0.25  0.25  0.    0.    0.25  0.25]
+ [ 0.    0.5   0.    0.    0.5   0.  ]
+ [ 0.    0.25  0.25  0.25  0.    0.25]
+ [ 0.    0.    0.5   0.    0.5   0.  ]]
+0.0
+[ 0.11111111  0.22222222  0.22222222  0.11111111  0.22222222  0.11111111] 
+
+[[ 0.25    0.125   0.125   0.125   0.25    0.125 ]
+ [ 0.0625  0.375   0.1875  0.0625  0.1875  0.125 ]
+ [ 0.0625  0.1875  0.375   0.125   0.1875  0.0625]
+ [ 0.125   0.125   0.25    0.25    0.125   0.125 ]
+ [ 0.125   0.1875  0.1875  0.0625  0.375   0.0625]
+ [ 0.125   0.25    0.125   0.125   0.125   0.25  ]]
+0.25
+[ 0.11111111  0.22222222  0.22222222  0.11111111  0.22222222  0.11111111]
+
+[[ 0.0625    0.28125   0.28125   0.09375   0.1875    0.09375 ]
+ [ 0.140625  0.15625   0.234375  0.140625  0.234375  0.09375 ]
+ [ 0.140625  0.234375  0.15625   0.09375   0.234375  0.140625]
+ [ 0.09375   0.28125   0.1875    0.0625    0.28125   0.09375 ]
+ [ 0.09375   0.234375  0.234375  0.140625  0.15625   0.140625]
+ [ 0.09375   0.1875    0.28125   0.09375   0.28125   0.0625  ]]
+0.0625
+[ 0.11111111  0.22222222  0.22222222  0.11111111  0.22222222  0.11111111] 
+
+[[ 0.140625    0.1953125   0.1953125   0.1171875   0.234375    0.1171875 ]
+ [ 0.09765625  0.2578125   0.21484375  0.09765625  0.21484375  0.1171875 ]
+ [ 0.09765625  0.21484375  0.2578125   0.1171875   0.21484375  0.09765625]
+ [ 0.1171875   0.1953125   0.234375    0.140625    0.1953125   0.1171875 ]
+ [ 0.1171875   0.21484375  0.21484375  0.09765625  0.2578125   0.09765625]
+ [ 0.1171875   0.234375    0.1953125   0.1171875   0.1953125   0.140625  ]]
+0.140625
+[ 0.11111111  0.22222222  0.22222222  0.11111111  0.22222222  0.11111111]
+\end{verbatimtab}
+\normalsize
+
+We now calculate some higher powers of $P$, here I only give one example $P^{100}$:
+
+\small
+\begin{verbatimtab}[4]
+>>> for i in range(4,100):
+		M = dot(M,P/4.)
+>>> print M, M.sum(axis=1)
+
+[[ 0.11111111  0.22222222  0.22222222  0.11111111  0.22222222  0.11111111]
+ [ 0.11111111  0.22222222  0.22222222  0.11111111  0.22222222  0.11111111]
+ [ 0.11111111  0.22222222  0.22222222  0.11111111  0.22222222  0.11111111]
+ [ 0.11111111  0.22222222  0.22222222  0.11111111  0.22222222  0.11111111]
+ [ 0.11111111  0.22222222  0.22222222  0.11111111  0.22222222  0.11111111]
+ [ 0.11111111  0.22222222  0.22222222  0.11111111  0.22222222  0.11111111]]
+[ 1.  1.  1.  1.  1.  1.]
+\end{verbatimtab}
+\normalsize
+
+These experiments convince us that $\pi = \frac{1}{9} ( 1,2,2,1,2,1 ) \approx 0.11111111 \times (1,2,2,1,2,1) $
+is indeed the invariant probability vector. \marginpar{ {\bf 3(c)(1)} }
+
+Finally, let us compute left egenvalues and associated eigenvectors of $P$:
+\marginpar{ {\bf 3(c)(2)} }
+\begin{verbatimtab}[4]
+>>> scipy.linalg.eig(P/4.,left=True,right=False)
+(array([-0.50+0.j,  0.25+0.j,  1.00+0.j, -0.50+0.j,  0.25+0.j, -0.50+0.j]),
+array([[  4.69160878e-01,  -5.46383944e-01,   2.58198890e-01,
+          0.00000000e+00,  -0.00000000e+00,   0.00000000e+00],
+       [ -2.87974695e-01,  -4.34742087e-01,   5.16397779e-01,
+          1.65937722e-01,   5.00000000e-01,  -5.34522484e-01],
+       [ -6.50347060e-01,  -1.11641857e-01,   5.16397779e-01,
+         -1.65937722e-01,  -5.00000000e-01,   5.34522484e-01],
+       [  2.41018718e-01,   1.11641857e-01,   2.58198890e-01,
+          3.10977345e-01,   5.00000000e-01,   4.85479132e-01],
+       [ -1.94062740e-01,   5.46383944e-01,   5.16397779e-01,
+         -7.87892413e-01,   1.20356739e-16,  -4.36435780e-01],
+       [  4.22204900e-01,   4.34742087e-01,   2.58198890e-01,
+          4.76915067e-01,  -5.00000000e-01,  -4.90433517e-02]]))
+\end{verbatimtab}
+Only the (left-)eigenvalue $1$ preserves the normalization property of
+probability vectors and thus is the only one relevant. The corresponding eigenvector, appropriately normalized,
+is the invariant probability vector.
+
+A previous listing showed that
+\marginpar{{\bf 3(a), 3(b)}}
+$$
+	P^1_{00} (00) = 0 \quad
+  	P^2_{00} (00) = \frac{1}{4} \quad
+	P^3_{00} (00) = \frac{1}{16} \quad
+	P^4_{00} (00) = \frac{9}{64} = 0.140625
+$$
+The last value is, of course, the probability of returning to the original state $00$ after 4 steps.
+Now, determine the probability $\PP_{revisit}$ that the chain revisits the state $00$ in the first 4 steps
+\footnote{I have omitted the zero terms, such as $\PP(\textrm{revisit in 1})$ and $\PP(\textrm{revisit in 2 and again in 1})$}
+\begin{equation}
+\begin{split}
+	\PP(\textrm{revisit in 4}) &= \PP (\textrm{revisit in 2}) 
+			+ \PP(\textrm{revisit in 3}) 
+			+ \PP(\textrm{revisit in 4}) \\
+			& - \PP(\textrm{revisit in 2 steps and then in another 2 steps}) \\
+		 &= P^2_{00}(00) + P^3_{00}(00) + P^4_{00}(00) - (P^2_{00}(00))^2 \\
+		 &= \frac{1}{4} + \frac{1}{16} + \frac{1}{64} - (\frac{1}{4})^2 \\
+		 &= \frac{25}{64} = 0.390625
+\end{split}
+\end{equation}
+
+A numerical experiment we conduct in question 4 confirms these values, which is comforting.
+\qed
+\end{solution}
+
+\appendix
+\section*{Code Listing: Random Walk on a Graph}
+% \input{random-walk-code}
+\verbatimtabinput[4]{hw1q3.py}
+
+\end{document}
