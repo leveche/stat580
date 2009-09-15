@@ -7,6 +7,8 @@
 \usepackage[all]{xy}
 \usepackage{moreverb}
 \usepackage{fancyhdr}
+\usepackage{graphicx}
+
 
     \newtheorem{problem}{Poblem}
     \newtheorem{theorem}{Theorem}[section]
@@ -34,6 +36,9 @@
 \addtolength{\hoffset}{-0.5in}
 \addtolength{\textheight}{2in}
 \addtolength{\voffset}{-0.3in}
+
+\relpenalty=9999
+\binoppenalty=9999
 
 \newcommand{\PP}{\mathbb{P}}
 
@@ -83,8 +88,11 @@ Since $(X_n)$ is a time-homogenous Markov chain, we obtain, for a probability ve
 
 Which is to say, $P^2$ is the transition matrix of $(X_{2n})$. In our construction, 
 we have not used any assumption on any chain state $\phi_{m < n}$ prior to $n$,
-which indicates that the Markovian property holds for the sub-chain as well.\footnote{This can be easily turned into a formal argument along the lines $(X_{2n})$ not Markovian $\implies$ $(X_n)$ not Markovian.}
+which indicates that the Markov property holds for the sub-chain 
+as well.\footnote{This can be easily turned into a formal argument along the 
+lines $(X_{2n})$ not Markovian $\implies$ $(X_n)$ not Markovian.}
 
+\qed
 \end{solution}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -181,7 +189,8 @@ Before proceeding to numerical experiments, let us determine an invariant probab
 $\mathbf{\pi} = (\pi_{00},\pi_{01},\pi_{10},\pi_{02},\pi_{11},\pi_{20})$
 from symmetry considerations: (00\, 02\, 20) (10\, 11\, 01) is clearly one of the symmetries of our graph,
 and it already forces $\pi_{00} = \pi_{02} = \pi_{20} =: a; \ \pi_{01} = \pi_{11} = \pi_{10} =: b$
-Moreover, the `mid-point' nodes $01,\,11,\,10$ are `twice as connected' as the end-nodes, so we expect $ b = 2a $.
+Moreover, the `mid-point' nodes $01,\,11,\,10$ are `twice as connected'\footnote{ The reduced graph is 
+\xymatrix{  endpoint \ar[r] & \ar[l] midpoint \ar@(r,d)[]_{} } } as the end-nodes, hence $ b = 2a $.
 In conjunction with the probability normalization $ 3(a+b) = 1 $, we obtain $ a = \frac{1}{9}, b = \frac{2}{9} $,
 thus $$\mathbf{\pi} = \frac{1}{9} ( 1,2,2,1,2,1 ) $$
 
@@ -282,23 +291,18 @@ Finally, let us compute left egenvalues and associated eigenvectors of $P$:
 \marginpar{ {\bf 3(c)(2)} }
 \begin{verbatimtab}[4]
 >>> scipy.linalg.eig(P/4.,left=True,right=False)
-(array([-0.50+0.j,  0.25+0.j,  1.00+0.j, -0.50+0.j,  0.25+0.j, -0.50+0.j]),
-array([[  4.69160878e-01,  -5.46383944e-01,   2.58198890e-01,
-          0.00000000e+00,  -0.00000000e+00,   0.00000000e+00],
-       [ -2.87974695e-01,  -4.34742087e-01,   5.16397779e-01,
-          1.65937722e-01,   5.00000000e-01,  -5.34522484e-01],
-       [ -6.50347060e-01,  -1.11641857e-01,   5.16397779e-01,
-         -1.65937722e-01,  -5.00000000e-01,   5.34522484e-01],
-       [  2.41018718e-01,   1.11641857e-01,   2.58198890e-01,
-          3.10977345e-01,   5.00000000e-01,   4.85479132e-01],
-       [ -1.94062740e-01,   5.46383944e-01,   5.16397779e-01,
-         -7.87892413e-01,   1.20356739e-16,  -4.36435780e-01],
-       [  4.22204900e-01,   4.34742087e-01,   2.58198890e-01,
-          4.76915067e-01,  -5.00000000e-01,  -4.90433517e-02]]))
+(array([1.00+0.j,  0.25+0.j, 0.25+0.j, -0.50+0.j, -0.50+0.j, -0.50+0.j]),
+array([
+	[1,2,2,1,2,1],
+	[1,0,1,-1,-1,0],
+	[0,1,-1,1,0,-1],
+	[1,0,-2,0,0,1],
+	[0,1,-1,0,-1,1],
+	[0,0,0,1,-2,1] ])
 \end{verbatimtab}
 Only the (left-)eigenvalue $1$ preserves the normalization property of
-probability vectors and thus is the only one relevant. The corresponding eigenvector, appropriately normalized,
-is the invariant probability vector.
+probability vectors and thus is the only one relevant. The corresponding eigenvector $[1,2,2,1,2,1]$, 
+appropriately normalized, is the invariant probability vector.
 
 A previous listing showed that
 \marginpar{{\bf 3(a), 3(b)}}
@@ -309,8 +313,10 @@ $$
 	P^4_{00} (00) = \frac{9}{64} = 0.140625
 $$
 The last value is, of course, the probability of returning to the original state $00$ after 4 steps.
-Now, determine the probability $\PP_{revisit}$ that the chain revisits the state $00$ in the first 4 steps
+Now, determine the probability %$\PP_{revisit}$ 
+that the chain revisits the state $00$ in the first 4 steps
 \footnote{I have omitted the zero terms, such as $\PP(\textrm{revisit in 1})$ and $\PP(\textrm{revisit in 2 and again in 1})$}
+
 \begin{equation}
 \begin{split}
 	\PP(\textrm{revisit in 4}) &= \PP (\textrm{revisit in 2}) 
@@ -322,11 +328,36 @@ Now, determine the probability $\PP_{revisit}$ that the chain revisits the state
 		 &= \frac{25}{64} = 0.390625
 \end{split}
 \end{equation}
+\marginpar{\tiny $\PP(A\cup B)=\PP(A)+\PP(B)-\PP(A\cap B)$ \normalsize}
 
 A numerical experiment we conduct in question 4 confirms these values, which is comforting.
 \qed
 \end{solution}
 
+\begin{problem}
+Simulation of Markov Chain in Qn. 3
+\end{problem}
+
+\begin{solution}
+The code to simulate a random walk on the graph is given in the appendix.
+To verify our values for the probability of returning to $00$ {\it in} four steps is $\approx 0.391$; 
+and {\it after} four steps $\approx 0.141$, we plot the absolute value of the difference between the visits counter 
+and the predicted value for the range of walks $2^7,2^8,..,2^{17}$. We observe that the maximal disagreement 
+is below $0.1$, and it converges quickly to nil, as illustrated in figure \ref{walks}.
+We also populate the nodes $\{ 00, 20, 02\}$ of the graph with $11111$ tokens, and nodes $\{ 10,01,11 \}$ with $22222$
+tokens, and `shuffle' them as prescribed by the transition matrix. The results are summarized in figure \ref{shuffles}
+
+\begin{figure}[h]
+ \includegraphics[height=.35\textheight]{walks.eps}
+ \caption{Convergence of the probability of returns/revisits for a 4-step random walk starting at $00$.
+   \label{walks}
+  }
+\end{figure}
+
+\qed
+\end{solution}
+
+\newpage
 \appendix
 \section*{Code Listing: Random Walk on a Graph}
 % \input{random-walk-code}

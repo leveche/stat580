@@ -15,6 +15,7 @@ for N in G:
 	if (4 == len(G.neighbors(N))):
 		G.node[N]['balls'] = 2 * G.node[N]['balls'] 
 	G.node[N]['orig_balls'] = G.node[N]['balls']
+	print N, G.node[N]
 
 def random_step(N):
 	nNeigh = len(G.neighbors(N))
@@ -51,43 +52,48 @@ def fourStepwalk(K):
 
 def shuffle_balls(K):
 	for k in range(K):
+		z = 1
+		if ( 4 == G.neighbors(N) ):
+			z = 2
 		for n in G:
 			if ( G.node[n]['balls'] ):
-				G.node[random_step(n)]['balls'] += 1
+				G.node[random_step(n)]['balls'] += z
+				G.node[n]['balls'] -= z
 	diff = 0
 	for n in G:
-		diff += G.node[n]['balls']-G.node[n]['orig_balls']
-		# print G.node[n]
+		diff += abs(G.node[n]['balls']-G.node[n]['orig_balls'])
+		print G.node[n], diff
 	return diff
 
-# shuffle_balls(100)
+shuffle_balls(100000)
 
+# raise SystemExit
 import pylab
 
 walks = []
 R = []
 V = []
-for i in range(7,13):
+for i in range(7,17):
 	walks.append(2**i)
 for i in walks:
 	(r,v) = fourStepwalk(i)
-	R.append(r-9./64.)
-	V.append(v-25./64.)
-
-#print walks
-#print V
-#print R
-
-pylab.subplot(211)
-l=pylab.plot(walks,R,walks,V)
-pylab.xlabel('no. of walks') 
-pylab.ylabel('diffefence with predicted value')
+	R.append(abs(r-9./64.))
+	V.append(abs(v-25./64.))
 
 shuffles=[]
 D=[]
-for i in range(10,1000):
+for i in range(10,20):
 	shuffles.append(i)
-	D.append(shuffle_balls(i)/i)
+	D.append(shuffle_balls(i))
+
+# pylab.subplot(211)
+l=pylab.plot(walks,R,walks,V)
+pylab.xlabel('no. of walks') 
+pylab.ylabel('difference with predicted value')
+pylab.legend(('return after 4 steps','revisit in 4 steps'))
+pylab.show()
+
+raise SystemExit
 
 pylab.subplot(212)
 m = pylab.plot(shuffles,D)
