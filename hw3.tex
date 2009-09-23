@@ -1,0 +1,100 @@
+\documentclass[8pt,notitlepage]{report}
+
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsmath,amscd}
+\usepackage[all]{xy}
+\usepackage{moreverb}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+
+
+    \newtheorem{problem}{Poblem}
+    \newtheorem{theorem}{Theorem}[section]
+    \newtheorem{lemma}[theorem]{Lemma}
+    \newtheorem{proposition}[theorem]{Proposition}
+    \newtheorem{corollary}[theorem]{Corollary}
+
+    \newenvironment{solution}[1][Solution]{\begin{trivlist}
+    \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+    \newenvironment{definition}[1][Definition]{\begin{trivlist}
+    \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+    \newenvironment{example}[1][Example]{\begin{trivlist}
+    \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+    \newenvironment{remark}[1][Remark]{\begin{trivlist}
+    \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+  %  \newcommand{\qed}{\nobreak \ifvmode \relax \else
+  %        \ifdim\lastskip<1.5em \hskip-\lastskip
+  %        \hskip1.5em plus0em minus0.5em \fi \nobreak
+  %        \vrule height0.75em width0.5em depth0.25em\fi}
+
+    \renewcommand{\qedsymbol}{\textsquare}
+
+\addtolength{\textwidth}{1in}
+\addtolength{\hoffset}{-0.5in}
+\addtolength{\textheight}{2in}
+\addtolength{\voffset}{-0.3in}
+
+\relpenalty=9999
+\binoppenalty=9999
+
+\newcommand{\PP}{\mathbb{P}}
+
+\pagestyle{fancy}
+%\fancyhead[CO,CE]{S.Chaichenets}
+\fancyfoot[CO,CE]{S.Chaichenets}
+\fancyfoot[RO, LE] {\thepage}
+
+
+\begin{document}
+
+\title{STAT 580 Stochastic Processes: HW 3}
+\author{ S.\ Chaichenets }
+\maketitle
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{problem}
+\small
+\begin{equation}
+\frac{1}{2^{2n}} {2n \choose n} = \frac{1}{2n} \prod_{j=1}^{n-1} \left(1+\frac{1}{2j}\right)
+\qquad \forall n\geq 1
+\end{equation}
+\normalsize
+\end{problem}
+
+\begin{solution}
+Induction step:
+
+\begin{equation}
+\begin{split}
+\frac{1}{2^{2(n+1)}} {2(n+1) \choose n+1} 
+	& := \frac{1}{2^{2n}}\frac{1}{2^2} \frac{(2n+2)!}{(n+1)!\,(n+1)!} 
+	 = \left[ \frac{1}{2^{2n}}\frac{(2n)!}{n!n!} \right]
+		\frac{(2n+1)(2n+2)}{(n+1)(n+1)}\frac{1}{2\times2} 			\\
+	& = \left[ \frac{1}{2n}\prod_{j=1}^{n-1} \left(1+\frac{1}{2j}\right) \right]
+		\frac{1}{2(n+1)}\frac{2n+1}{1} 
+	 = \left[ \frac{1}{2(n+1)}\prod_{j=1}^{n-1} \left(1+\frac{1}{2j}\right) \right]
+		\frac{2n+1}{2n}								\\
+	& = \left[ \frac{1}{2(n+1)}\prod_{j=1}^{n-1} \left(1+\frac{1}{2j}\right) \right]
+		\left( 1 + \frac{1}{2n} \right)
+	 = \frac{1}{2(n+1)}\prod_{j=1}^{(n+1)-1} \left(1+\frac{1}{2j}\right)
+\end{split}
+\end{equation}
+Induction base: interpreting an `empty' product as 1, we have, for $n=1$
+$$
+\frac{1}{2^2}{2 \choose 1} = \frac{1}{2\times2} \times 2 = \frac{1}{2}
+$$
+\qed
+\end{solution}
+
+\newpage
+\appendix
+\section*{Code Listing: Random Walk on a Graph}
+
+% \verbatimtabinput[4]{hw1q3.py}
+
+\end{document}

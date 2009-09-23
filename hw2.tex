@@ -1,0 +1,104 @@
+\documentclass[8pt,notitlepage]{report}
+
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsmath,amscd}
+\usepackage[all]{xy}
+\usepackage{moreverb}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+
+
+    \newtheorem{problem}{Poblem}
+    \newtheorem{theorem}{Theorem}[section]
+    \newtheorem{lemma}[theorem]{Lemma}
+    \newtheorem{proposition}[theorem]{Proposition}
+    \newtheorem{corollary}[theorem]{Corollary}
+
+    \newenvironment{solution}[1][Solution]{\begin{trivlist}
+    \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+    \newenvironment{definition}[1][Definition]{\begin{trivlist}
+    \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+    \newenvironment{example}[1][Example]{\begin{trivlist}
+    \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+    \newenvironment{remark}[1][Remark]{\begin{trivlist}
+    \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+  %  \newcommand{\qed}{\nobreak \ifvmode \relax \else
+  %        \ifdim\lastskip<1.5em \hskip-\lastskip
+  %        \hskip1.5em plus0em minus0.5em \fi \nobreak
+  %        \vrule height0.75em width0.5em depth0.25em\fi}
+
+    \renewcommand{\qedsymbol}{\textsquare}
+
+\addtolength{\textwidth}{1in}
+\addtolength{\hoffset}{-0.5in}
+\addtolength{\textheight}{2in}
+\addtolength{\voffset}{-0.3in}
+
+\relpenalty=9999
+\binoppenalty=9999
+
+\newcommand{\PP}{\mathbb{P}}
+
+\pagestyle{fancy}
+%\fancyhead[CO,CE]{S.Chaichenets}
+\fancyfoot[CO,CE]{S.Chaichenets}
+\fancyfoot[RO, LE] {\thepage}
+
+
+\begin{document}
+
+\title{STAT 580 Stochastic Processes: HW 2}
+\author{ S.\ Chaichenets }
+\maketitle
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{problem}
+Markov chain with 
+\small
+\begin{equation}
+P = 
+\bordermatrix{
+	& \mathbf{0} & \mathbf{1} & \mathbf{2} & \mathbf{3} & \mathbf{4} \cr
+\mathbf{0} &  \frac{1}{2} & \frac{1}{2} & 0 & 0 & 0 \cr
+\mathbf{1} &  \frac{1}{6} & \frac{5}{6} & 0 & 0 & 0 \cr
+\mathbf{2} &  0 & 0 & \frac{3}{4} & \frac{1}{4} & 0 \cr
+\mathbf{3} &  0 & 0 & \frac{1}{6} & \frac{5}{6} & 0 \cr
+\mathbf{4} &  \frac{1}{5} & \frac{1}{5} & \frac{1}{5} & \frac{1}{5} & \frac{1}{5} \cr
+}
+\end{equation}
+\normalsize
+
+\SelectTips{cm}{}
+\xymatrix{
+	  *+[o][F-]{0}	\ar@(dl,ul)[]^{\frac{1}{2}} \ar@/^/[r]^{\frac{1}{2}} %
+	& *+[o][F-]{1} 	\ar@/^/[l]^{\frac{1}{6}} \ar@(ur,dr)[]^{\frac{5}{6}} %
+	&  &  & 
+	& *+[o][F-]{2}	\ar@(dl,ul)[]^{\frac{3}{4}} \ar@/^/[r]^{\frac{1}{4}} %
+	& *+[o][F-]{3}	\ar@/^/[l]^{\frac{1}{6}} \ar@(ur,dr)[]^{\frac{5}{6}} %
+	\\ %
+	& & & *+[o][F-]{4} \ar@/^/[ulll]^{\frac{1}{5}} %
+				\ar@/^/[ull]_{\frac{1}{5}} %
+				\ar@/_/[urr]^{\frac{1}{5}} %
+				\ar@/_/[urrr]_{\frac{1}{5}} %
+				\ar@(ul,ur)^{\frac{1}{5}} & &
+}
+
+\end{problem}
+
+\begin{solution}
+
+\qed
+\end{solution}
+
+\newpage
+\appendix
+\section*{Code Listing: Random Walk on a Graph}
+
+% \verbatimtabinput[4]{hw1q3.py}
+
+\end{document}
