@@ -88,6 +88,21 @@ Induction base: interpreting an `empty' product as 1, we have, for $n=1$
 $$
 \frac{1}{2^2}{2 \choose 1} = \frac{1}{2\times2} \times 2 = \frac{1}{2}
 $$
+Now, for any $N\in \mathbb{N}$, we have
+\begin{equation}
+\begin{split}
+\sum_{n=0}^{N} p_{2n}(0,0) &= \sum_n \frac{1}{2^n}\frac{1}{2^n}{2n \choose n}		\\
+			&= \frac{1}{2n} \prod_{j=1}^{n-1} \left(1+\frac{1}{2j}\right)	\\
+			&\geq	\sum_{n}\frac{1}{2n}
+\end{split}
+\end{equation}
+Since the harmonic series $\sum_n \frac{1}{2n}$ diverges, 
+the sum $\sum_{n} p_{2n}(0,0)$ also diverges.
+
+This means that the state $0$ in the symmetric one-dimensional random walk is transient,
+and, since the only communicating class is $\mathbb{Z}$ itself\footnote{
+	or by translational symmetry
+}, {\it any} state $n\in \mathbb{Z}$ is transient.
 \qed
 \end{solution}
 
