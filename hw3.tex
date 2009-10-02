@@ -106,6 +106,61 @@ and, since the only communicating class is $\mathbb{Z}$ itself\footnote{
 \qed
 \end{solution}
 
+\begin{problem}
+For symmetric three-dimensional random walk, calculate the probabilities 
+$p_{2n}(0,0)$, for $n\in\{1,2,3\}$.
+\end{problem}
+\begin{solution}{${\mathbf n=1}$}:\\
+	There is a total of $6^2$ 2-step random walks in 3D, all equiprobable.
+	We need to calculate how many of these end up in $0$.
+	Note that the number of `+' and `-' steps must be balanced 
+	for every dimension separately:
+	$$ 2 = 0 + 0 + 2 = 0 + 2 + 0 = 2 + 0 + 0 $$
+	In each of these, the order of + and - is immaterial: $+_x\,-_x = -_x\,+_x$.
+	Thus
+  	$$
+		p_2(0,0) = \frac{2 \times 3}{6^2}  = \frac{1}{6}
+	$$
+\qed
+\end{solution}
+
+\begin{solution}${\mathbf n=2}$: \\
+	We have $$ 4 = 0 + 0 + 4 = 0+4+0 = 4+0+0 = 0+2+2 = 2+0+2 = 2+2+0 $$
+	The `one-dimensional' walks 4 steps in length 
+	can happen in ${4\choose2}$ ways each. Therefore,
+	$ {4\choose2} \times 3 + {2\choose1}\times{2\choose1}\times3 =18+12=30$ 
+	out of $6^4$ walks return to the origin in the end:
+	$$ p_4(0,0) = \frac{5\times6}{6^4} = \frac{5}{6^3} = \frac{5}{216} \approx 0.0231 $$
+\qed
+\end{solution}
+
+\begin{solution}${\mathbf n=3}$: \\
+	Again, 
+	\scriptsize
+	$$ 6 	= 0+0+6 
+		= 0+6+0 
+		= 6+0+0 
+		= 0+4+2 
+		= 4+0+2 
+		= 4+2+0 
+		= 0+2+4
+		= 2+0+4
+		= 2+4+0
+		= 2+2+2
+	$$
+	\normalsize
+	And the number of 6-segment paths returning to $0$ at the end is
+	$$
+		{6\choose3} \times 3 
+		+ {4\choose2}\times{2\choose1}\times6 
+		+ \left({2\choose1}\right)^3\times1
+		= 60 + 72 + 8 = 140
+	$$
+	out of $6^6$ total.
+	$$ p_4(0,0) = \frac{140}{6^6} = \frac{35}{11664} \approx 0.00300 $$
+\qed
+\end{solution}
+
 \newpage
 \appendix
 \section*{Code Listing: Random Walk on a Graph}

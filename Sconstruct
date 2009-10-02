@@ -14,7 +14,7 @@ env = Environment(\
 	)
 env.Append( BUILDERS = {'DVIPS':'psBuilder'} )
 # dviOutput = env.DVI(target='hw1.dvi',source='hw1.tex')
-dviOutput 	= env.DVI(target='hw2.dvi',source='hw2.tex')
+dviOutput 	= env.DVI(target='hw3.dvi',source='hw3.tex')
 # psOutput	= env.DVIPS(  'hw2.dvi', 'hw2.ps' )
 # Depends(pdfOutput,Split('presentation.tex bibliography.bib'))
 

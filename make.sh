@@ -1,7 +1,7 @@
 export TEXINPUTS="./share/styles//:"
 export TEXFONTS="./share/fonts//:"
 
-src='hw2'
+src='hw3'
 for i in 1 2; do
 	latex ${src}.tex
 done
