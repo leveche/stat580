@@ -3,10 +3,10 @@ export TEXFONTS="./share/fonts//:"
 
 case $1 in
 	'clean')
-		mv *.ps *dvi *.aux *.log *.pdf /tmp;
+		mv *.ps *dvi *.aux *.log *.pdf *.end /tmp;
 	;;
 	*)
-		src='hw4'
+		src=$1	#'hw5'
 		for i in 1 2; do
 			latex ${src}.tex
 			pdflatex ${src}.tex

@@ -54,7 +54,7 @@
 \title{STAT 580 Stochastic Processes \\
 	Assignment 4}
 \author{ S.\ Chaichenets }
-\date{\today}
+\date{October 22, 2009}
 \maketitle
 
 
@@ -240,13 +240,6 @@ Take $Q$ to be the submatrix of transitions inside the set $\{11,12,21,22,23,31,
  (I-Q)^{-1} = 
  \bordermatrix{
 & \mathbf{11} & \mathbf{12} & \mathbf{21} & \mathbf{22} & \mathbf{23} & \mathbf{31} & \mathbf{32} \cr
-%\mathbf{11} & & & & & & & \cr
-%\mathbf{12} & & & & & & & \cr
-%\mathbf{21} & & & & & & & \cr
-%\mathbf{22} & & & & & & & \cr
-%\mathbf{23} & & & & & & & \cr
-%\mathbf{31} & & & & & & & \cr
-%\mathbf{32} & & & & & & & \cr
 \mathbf{11} & \frac{114}{65} & \frac{147}{130} & \frac{147}{130} & \frac{66}{65} & \frac{33}{130} & \frac{36}{65} & \frac{69}{130}\cr
 \mathbf{12} & \frac{48}{65} & \frac{209}{130} & \frac{79}{130} & \frac{62}{65} & \frac{31}{130} & \frac{22}{65} & \frac{53}{130}\cr 
 \mathbf{21} &\frac{10}{13} & \frac{17}{26} & \frac{43}{26} & \frac{14}{13} & \frac{7}{26} & \frac{10}{13} & \frac{17}{26}\cr 
@@ -275,12 +268,23 @@ Hence
 }
 \end{equation}
 \normalsize
-From which we read off $\PP((31) \to (33) {\rm \ before\ } A) = \frac{47}{65} \approx 0.723 < \frac{75}{100}$. 
+From which we read off $\PP((31) \to (33) {\rm \ before\ } A) = \frac{47}{65} \approx 0.723 < \frac{75}{100}$.
+\marginpar{this prob should be \frac{3}{5}}
 Thus the expected payoff for continuing the game after reaching the state $(31)$ is smaller than the payoff 
 for stopping and collecting $75$.
 
 Thus \begin{equation} \varepsilon = \{A,(31),(33)\} \end{equation} and the optimal strategy 
 is to keep playing until hitting either of these states.
+
+Int the appendix, we repeat the calculation above to see the probability distribution for first hit of the set $\varepsilon$:
+$$
+  \left(\frac{3}{7},\frac{3}{7},\frac{1}{7}\right)
+$$
+Combining the results above, we obtain the value of the game, starting at position $(11)$, as 
+the expected payoff:
+$$ 
+	\EE_{11} = \frac{3}{7}\times(75+0) + 100\times\frac{1}{7} = \frac{325}{7} \approx 46.43
+$$
 \qed
 \end{solution}
 
