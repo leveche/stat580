@@ -1,0 +1,294 @@
+\documentclass[aps,prl,twocolumn,floatfix,letterpaper]{revtex4}
+
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsmath,amscd}
+\usepackage[all]{xy}
+\usepackage{moreverb}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+
+
+    \newtheorem{problem}{Problem}
+    \newtheorem{theorem}{Theorem}[section]
+    \newtheorem{lemma}[theorem]{Lemma}
+    \newtheorem{proposition}[theorem]{Proposition}
+    \newtheorem{corollary}[theorem]{Corollary}
+
+    \newenvironment{solution}[1][Solution]{\begin{trivlist}
+    \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+    \newenvironment{definition}[1][Definition]{\begin{trivlist}
+    \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+    \newenvironment{example}[1][Example]{\begin{trivlist}
+    \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+    \newenvironment{remark}[1][Remark]{\begin{trivlist}
+    \item[\hskip \labelsep {\bfseries #1}]}{\end{trivlist}}
+
+  %  \newcommand{\qed}{\nobreak \ifvmode \relax \else
+  %        \ifdim\lastskip<1.5em \hskip-\lastskip
+  %        \hskip1.5em plus0em minus0.5em \fi \nobreak
+  %        \vrule height0.75em width0.5em depth0.25em\fi}
+
+    \renewcommand{\qedsymbol}{\textsquare}
+
+\addtolength{\textwidth}{0.5in}
+\addtolength{\hoffset}{-0.3in}
+\addtolength{\textheight}{0.5in}
+\addtolength{\voffset}{-0.3in}
+
+\relpenalty=9999
+\binoppenalty=9999
+
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\EE}{\mathbb{E}}
+
+\pagestyle{fancy}
+%\fancyhead[CO,CE]{S.Chaichenets}
+\fancyfoot[CO,CE]{S.Chaichenets}
+\fancyfoot[RO, LE] {\thepage}
+
+
+\begin{document}
+
+\title{STAT 580 Stochastic Processes \\
+	Assignment 4}
+\author{ S.\ Chaichenets }
+\date{\today}
+\maketitle
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{problem}
+Symmetric random walk on $S=\{0,1,2,\ldots,10\}$ with absorbing boundaries.
+Find the optimal stopping rule and the value function, for the payoff function
+$$
+	f(x) = (2,8,0,10,0,1,4,2,9,2,6)^T
+$$
+\end{problem}
+
+\begin{solution}
+For a symmetric random walk, a harmonic function is of the
+form $h(x) = P\,h(x) = \alpha x$ %\marginpar{proof!}
+
+We thus start with $$\varepsilon \supseteq \{ {\rm absorbing\ states} \} \cup \{ {\rm global\ maximum}\} = \{0,3,10\}$$
+and continue by dissecting the set into intervals left and right of the maximum: \\*
+${1} \in \varepsilon $ because $ 8 > 2 + \frac{10-2}{3-0}\times1 < 5$.\\*
+${8} \in \varepsilon $ because $ 9 > 6 + \frac{10-6}{10-3}\times1 < 7$. \\*
+Continuing the dissection until the entire set is exhausted, we obtain
+$$\varepsilon=\{0,1,3,8,10\}$$, and the value function
+$$
+v = (0,8,9,10,9\frac{4}{5},9\frac{3}{5},9\frac{2}{5},9\frac{1}{5},9,7\frac{1}{2},6)^T
+$$
+
+The listing in the Appendix gives the code and a {\rm SAGE} interactive session used to obtain 
+iterative approximations for $v$. After 20 iterations, we obtained
+\tiny
+\begin{equation}
+\begin{split}
+u_{20} &= 
+(2, 8, 9, 10, \frac{2630897439}{268435456}, \frac{1288720159}{134217728},
+\frac{1261832693}{134217728}, \frac{1234945227}{134217728}, 9, 15/2, 6) \\
+&\approx 
+(2, 8, 9, 10, 9.8, 9.6, 9.4, 9.2, 9, 7.5, 6)
+\end{split}
+\end{equation}
+\normalsize
+\qed
+\end{solution}
+
+\begin{problem}
+Find optimal strategy and the value of the following dice game:
+1) Roll 3 dice, and either accept the lowest score as payoff, or
+2) roll 2 dice, either accept the lowest score or
+3) roll 1 die, the score determining the payoff.
+\end{problem}
+
+\begin{solution}
+Let us model this game as a Markov chain on the state space
+$S=\{*\} \cup \{(n,D) | n=0,1,2 {\rm \ and\ } D \in \{1,\ldots,6 \} \}$, 
+where * denotes the `start' state (with zero payoff), $n$ is the
+number of throws still available, and $D$ is the score on the dice.
+
+the value function for $n=0$ coincides with the payoff:
+$$
+v(n=0,D) = D
+$$
+
+For $n=1$, we either accept the current score $D$, or roll one 
+die to get the no-appeal payoff. The expectation of the latter is $3.5$, 
+hence the value function\footnote{with the conventional ordering of states $(0,1,\ldots,6)$} 
+in this case is 
+$$
+v(n=1) = (7/2,7/2,7/2,4,5,6)^T
+$$
+
+Let us now calculate the order statistic for two dice:
+We have $\PP(D > n) = \frac{6-n}{6}; \ n=1,\ldots,6$, so that 
+\scriptsize
+\begin{equation}
+\begin{split}
+\PP(D_1 \wedge D_2 = n) &= \PP(D_1 = D_2 = n)
+		+ {2\choose 1} \PP(D_1 = n) \times \PP(D_2 > n) 	\\
+	&= \frac{1}{6^2} 
+		+ \frac{1}{3}\times \frac{6-n}{6}			\\
+	&= \frac{1}{36} (11,9,7,5,3,1)
+\end{split}
+\end{equation}
+\normalsize
+
+The expectation of $v(n=1)$ under this random variable is
+\scriptsize
+\begin{equation}
+\begin{split}
+\EE(v(n=1)) &= \frac{7}{2}\times\frac{11}{36}
+	+ \frac{7}{2}\times\frac{9}{36}
+	+ \frac{7}{2}\times\frac{7}{36}
+	+ 4\times\frac{5}{36}
+	+ 5\times\frac{3}{36}
+	+ 6\times\frac{1}{36}		\\
+	&= \frac{271}{72} \approx 3.76
+\end{split}
+\end{equation}
+\normalsize
+
+From which follows the value function for $n=2$:
+$$
+v(n=2) = (\frac{271}{72},\frac{271}{72},\frac{271}{72},4,5,6)^T
+$$
+
+Now, repeat the above step with order statistic for three dice:
+\begin{widetext}
+\begin{equation}
+\begin{split}
+\PP(D_1 \wedge D_2 \wedge D_3 = n) &= \PP(D_1=D_2=D_3=n) 	
+				+ {3\choose2} \PP (D_1=D_2=n<D_3)
+				+ {3\choose1} \PP (D_1=n<D_2,D_3)		\\
+	&= \frac{1}{6^3} 
+		+ 3 \times \frac{1}{6^2} \times \frac{6-n}{6}
+		+ \frac{1}{2} \times \left(\frac{6-n}{6}\right)^2
+	= \frac{1}{6^3} (91,61,37,19,7,1)	\\
+\end{split}
+\end{equation}
+\end{widetext}
+
+And finally, calculate the value of the entire game:
+\begin{equation}
+\begin{split}
+\EE(*) &= \frac{1}{216}\left(91,61,37,19,7,1\right)
+		\left(\frac{271}{72},\frac{271}{72},\frac{271}{72},4,5,6 \right)^T \\
+	&= \frac{2209}{576} \approx 3.835
+\end{split}
+\end{equation}
+
+We summarize the above results in the following table:
+
+\begin{center}
+\begin{tabular}{c| cccccc}
+n \textbackslash\  d &  1	&  2	&  3	&  4  	&   5	&  6	\cr
+\hline
+* & \multicolumn{6}{c} {$\frac{2209}{576}$} \cr
+2	& $\frac{271}{72}$ & $\frac{271}{72}$ & $\frac{271}{72}$ &	4 & 5 & 6	\cr
+1	& $\frac{7}{2}$ &  $\frac{7}{2}$  &  $\frac{7}{2}$  & 4 & 5 &	6		\cr
+0	& 1 & 2 & 3 & 4 & 5 & 6 
+\end{tabular}
+\end{center}
+
+The optimal strategy is to keep playing, for as long as possible, until the minimum 
+of a dice throw is 4 or greater.
+
+\qed
+\end{solution}
+
+\pagebreak[3]
+
+\begin{problem}
+Random walk on a $3\times3$ board, starting in position $(11)$, with $(31)=:A$ 
+the only absorbing state, and the payoff function
+\scriptsize $f(xy) = \begin{cases} 75 & xy=(13) \\ 100 & xy=(33) \\ 0 & {\rm otherwise} \end{cases} $\normalsize. 
+Find the value of the game and the optimal strategy.
+\end{problem}
+
+\begin{solution}
+First of all, the `termination' set $\varepsilon \supseteq \{ A, 33 \} $, and clearly 
+$ f^{-1}(0) \cap \varepsilon = \{A\} $. 
+Thus we only have to decide whether $(13) \in \varepsilon$ or not.
+To this end, calculate the probability of reaching $A$ before $(33)$,starting from $(31)$: 
+%- which by symmetry is the same as reaching $(33)$, before $(31)$, starting from $(11)$:
+the transition matrix for the board is
+\small
+\begin{equation}
+ P = 
+ \bordermatrix{
+	& \mathbf{11} & \mathbf{12} & \mathbf{13} & \mathbf{21} & \mathbf{22} & \mathbf{23} & \mathbf{31} & \mathbf{32} & \mathbf{33} \cr
+\mathbf{11} & 	0	& \frac{1}{2}	& 0 	& \frac{1}{2} & 0 & 0 & 0 & 0 & 0	\cr
+\mathbf{12} & \frac{1}{3} & 0 & \frac{1}{3} & 0 & \frac{1}{3} & 0 & 0 & 0 & 0		\cr
+\mathbf{13} & 0 & \frac{1}{2} & 0 & 0 & 0 & \frac{1}{2} & 0 & 0 & 0			\cr
+\mathbf{21} & \frac{1}{3} & 0 & 0 & 0 & \frac{1}{3} & 0 & \frac{1}{3} & 0 & 0		\cr
+\mathbf{22} & 0 & \frac{1}{4} & 0 & \frac{1}{4} & 0 & \frac{1}{4} & 0 & \frac{1}{4} & 0 \cr
+\mathbf{23} & 0 & 0 & \frac{1}{3} & 0 & \frac{1}{3} & 0 & 0 & 0 & \frac{1}{3}		\cr
+\mathbf{31} & 0 & 0 & \frac{1}{2} & 0 & 0 & 0 & 0 & \frac{1}{2} & 0			\cr
+\mathbf{32} & 0 & 0 & 0 & 0 & \frac{1}{3} & 0 & \frac{1}{3} & 0 & \frac{1}{3}		\cr
+\mathbf{33} & 0 & 0 & 0 & 0 & 0 & \frac{1}{2} & 0 & \frac{1}{2} & 0
+ }
+\end{equation}
+\normalsize
+Take $Q$ to be the submatrix of transitions inside the set $\{11,12,21,22,23,31,32\}$, so that
+\scriptsize
+\begin{equation}
+ (I-Q)^{-1} = 
+ \bordermatrix{
+& \mathbf{11} & \mathbf{12} & \mathbf{21} & \mathbf{22} & \mathbf{23} & \mathbf{31} & \mathbf{32} \cr
+%\mathbf{11} & & & & & & & \cr
+%\mathbf{12} & & & & & & & \cr
+%\mathbf{21} & & & & & & & \cr
+%\mathbf{22} & & & & & & & \cr
+%\mathbf{23} & & & & & & & \cr
+%\mathbf{31} & & & & & & & \cr
+%\mathbf{32} & & & & & & & \cr
+\mathbf{11} & \frac{114}{65} & \frac{147}{130} & \frac{147}{130} & \frac{66}{65} & \frac{33}{130} & \frac{36}{65} & \frac{69}{130}\cr
+\mathbf{12} & \frac{48}{65} & \frac{209}{130} & \frac{79}{130} & \frac{62}{65} & \frac{31}{130} & \frac{22}{65} & \frac{53}{130}\cr 
+\mathbf{21} &\frac{10}{13} & \frac{17}{26} & \frac{43}{26} & \frac{14}{13} & \frac{7}{26} & \frac{10}{13} & \frac{17}{26}\cr 
+\mathbf{22} & \frac{6}{13} & \frac{9}{13} & \frac{9}{13} & \frac{24}{13} & \frac{6}{13} & \frac{6}{13} & \frac{9}{13}\cr
+\mathbf{23} & \frac{2}{13} & \frac{3}{13} & \frac{3}{13} & \frac{8}{13} & \frac{15}{13} & \frac{2}{13} & \frac{3}{13}\cr
+\mathbf{31} &\frac{6}{65} & \frac{9}{65} & \frac{9}{65} & \frac{24}{65} & \frac{6}{65} & \frac{84}{65} & \frac{48}{65}\cr 
+\mathbf{32} &\frac{12}{65} & \frac{18}{65} & \frac{18}{65} & \frac{48}{65} & \frac{12}{65} & \frac{38}{65} & \frac{96}{65}
+}
+\end{equation}
+\normalsize
+and
+$$
+S^T = \bordermatrix{
+& \mathbf{11} & \mathbf{12} & \mathbf{21} & \mathbf{22} & \mathbf{23} & \mathbf{31} & \mathbf{32}\cr
+\mathbf{13} & 0 & \frac{1}{3} & 0 & 0 & \frac{1}{3} & \frac{1}{2} & 0\cr 
+\mathbf{33} & 0 & 0 & 0 & 0 & \frac{1}{3} & 0 & \frac{1}{3}
+}
+$$
+Hence
+\small
+\begin{equation}
+\left((I-Q)^{-1}S\right)^T = \bordermatrix{
+& \mathbf{11} & \mathbf{12} & \mathbf{21} & \mathbf{22} & \mathbf{23} & \mathbf{31} & \mathbf{32}\cr
+\mathbf{13} & \frac{48}{65} & \frac{51}{65} & \frac{9}{13} & \frac{8}{13} & \frac{7}{13} & \frac{47}{65} & \frac{29}{65}\cr 
+\mathbf{33} & \frac{17}{65} & \frac{14}{65} & \frac{4}{13} & \frac{5}{13} & \frac{6}{13} & \frac{18}{65} & \frac{36}{65}
+}
+\end{equation}
+\normalsize
+From which we read off $\PP((31) \to (33) {\rm \ before\ } A) = \frac{47}{65} \approx 0.723 < \frac{75}{100}$. 
+Thus the expected payoff for continuing the game after reaching the state $(31)$ is smaller than the payoff 
+for stopping and collecting $75$.
+
+Thus \begin{equation} \varepsilon = \{A,(31),(33)\} \end{equation} and the optimal strategy 
+is to keep playing until hitting either of these states.
+\qed
+\end{solution}
+
+\appendix
+%\section*{Code Listing}
+%
+%scriptsize
+%
+%\normalsize
+\end{document}
+
