@@ -6,7 +6,7 @@ case $1 in
 		mv *.ps *dvi *.aux *.log *.pdf /tmp;
 	;;
 	*)
-		src='hw4'
+		src='hw5'
 		for i in 1 2; do
 			latex ${src}.tex
 			pdflatex ${src}.tex
